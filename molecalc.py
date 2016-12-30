@@ -2,7 +2,13 @@ import settings
 import math as m
 import random
 
+
+'''#############################################################################
+ rand_angle() returns the angle between  A,B,C of molecule. If sigmas are equal 
+ then the angle would be 60 degrees, isolateral triangle. 
+#############################################################################'''
 def rand_angle():
+    # determine angle from cosine rule
     sig = settings.sig
     settings.rc = sig[4]*1.5
     siga = sig[0]/2
@@ -21,7 +27,12 @@ def rand_angle():
     random_angle = a_mol
     #random_angle = random.randrange(int(a_mol),180,1) #bring this back for random angle
     return random_angle
-    
+
+'''#################################################################################
+mol_xyz() takes the angle from rand_angle and computes the coordinates for all the 
+atoms in the trimer, A,B,C and determines a centroid particle(D) which will serve
+as indicator if it is left or right handed
+#################################################################################'''
 def mol_xyz(random_angle):
     sig = settings.sig
     siga = sig[0]/2
@@ -30,10 +41,10 @@ def mol_xyz(random_angle):
     
     rand_rad = random_angle/57.2958 # random angle in randians     
     r_angle = abs(random_angle)
+    #using cosine rule again
     a = sigb + sigc
     c = siga + sigb
-    b = (a**2)+(c**2)-2*a*c*m.cos(rand_rad)
-    
+    b = (a**2)+(c**2)-2*a*c*m.cos(rand_rad)    
     if r_angle <= 90:
         rand_rad = r_angle/57.2958
     else:
@@ -46,6 +57,7 @@ def mol_xyz(random_angle):
     sign = random.randint(0,1)
     if sign == 0:
         Cy = -Cy
+    #determining the cooridates of the centroid particle
     A = [-(sigb+siga),0,0]
     B = [0,0,0]
     C = [Cx,Cy,0]
@@ -57,6 +69,11 @@ def mol_xyz(random_angle):
     B = [Dx+B[0],Dy+B[1],0]
     C = [Dx+C[0],Dy+C[1],0]
     return A, B, C, D
+
+'''##############################################################################################
+cell_coords determines uses the cooridantes of the molecule to then make string coordinates
+for a^2 (a is number of molcules in 1D) molecules in the box with equal amounts of each handedness
+################################################################################################'''
 
 def cell_coords(A,B,C,D):
     sig = settings.sig
