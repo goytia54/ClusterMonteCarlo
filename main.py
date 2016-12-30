@@ -4,7 +4,27 @@ Created on Mon May 23 16:17:44 2016
 
 @author: Michael Goytia aka the best
 """
-###I would delete this if at all possible...
+
+'''########################################################################
+ClusterMonteCarlo Code
+!OBJECTIVE: to determine which molecular parameters lead to the formation
+of enantiopure crystals via monte carlo-type exploration. In this particular
+approach we have biased the simulation to produce configurations with inital
+enantiopure results in which the bias is slowly decreased to hopefully lead
+to parameters that maintain the pureness.
+
+!PROCESS
+1. change a parameter: EorS()
+2. Build the input files to run in HOOMD: mol_xyz(),cell_coords(), hoomdXML
+   hoomdIN()
+3. Run the simulation using the .exe hoomd
+4. Extract data and analyze clusters: read_traj(), near_neigh(),cluster_analyze
+   and fit_param
+6. Accept or reject the move based on the neighbor density of clusters
+5. Repeat steps 1-5 until the bias is off
+########################################################################'''
+
+
 from __future__ import division
 
 import random 
