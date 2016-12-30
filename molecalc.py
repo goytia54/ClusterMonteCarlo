@@ -3,10 +3,10 @@ import math as m
 import random
 
 
-'''#############################################################################
+'''####################################################################################
  rand_angle() returns the angle between  A,B,C of molecule. If sigmas are equal 
  then the angle would be 60 degrees, isolateral triangle. 
-#############################################################################'''
+####################################################################################'''
 def rand_angle():
     # determine angle from cosine rule
     sig = settings.sig
@@ -28,11 +28,11 @@ def rand_angle():
     #random_angle = random.randrange(int(a_mol),180,1) #bring this back for random angle
     return random_angle
 
-'''#################################################################################
+'''######################################################################################
 mol_xyz() takes the angle from rand_angle and computes the coordinates for all the 
 atoms in the trimer, A,B,C and determines a centroid particle(D) which will serve
 as indicator if it is left or right handed
-#################################################################################'''
+######################################################################################'''
 def mol_xyz(random_angle):
     sig = settings.sig
     siga = sig[0]/2
