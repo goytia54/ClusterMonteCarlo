@@ -4,11 +4,18 @@ Created on Wed Aug 24 12:23:48 2016
 
 @author: Michael
 """
+'''############################################################################################
+hoomdXML() writes the coordinates input file for HOOMD 1.X.X and hoomdIN() write the python 
+script that HOOMD is run by.
+############################################################################################'''
+
 
 import settings
 import math as m
 
+
 def hoomdXML(strings,lx,ly):
+    #strings come from molecalc.py, whihc are just are the paramters for each molecule.
     d_file = settings.d_file
     datafile = open(d_file,'w')
     datafile.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<hoomd_xml version=\"1.4\">\n<configuration time_step=\"0\" dimensions=\"2\">\n")
@@ -24,15 +31,16 @@ def hoomdXML(strings,lx,ly):
     return box_dim
 
 def hoomdIN():
+	#parameters for HOOMD RUN
 	sig = settings.sig #sigma values
         eps = settings.eps #epsilon values
         for i in xrange(len(eps)):
                 eps[i] = eps[i]*4.184
         rc = max(settings.sig)*2.5
-        kbol = 0.00831445986
+        kbol = 0.00831445986 #boltsman in kcal/mol
         tempK = settings.temp
         rS = settings.rS
-        tempi = kbol*tempK
+        tempi = kbol*tempK # temp
         rSname = settings.rs_d_file
         thermo = settings.thermo
         movie = settings.dump
@@ -44,6 +52,7 @@ def hoomdIN():
         runfile.write('system = init.read_xml(filename=\'init.xml\')\n')
         runfile.write('lj = pair.lj(r_cut={0})\n'.format(rc))
         count = 0
+	# writing all the i,j leonard jones interactions
 	for i in range(0,len(sig)):
                 for j in range(i,len(sig)):
                         Rcut = (0.5*(sig[i]+sig[j]))*2.5
@@ -57,6 +66,7 @@ def hoomdIN():
 	runfile.write('lj.set_params(mode="shift")\n')
         charge_const = 1389.35458*bias*0.5*0.5
         runfile.write('yuk = pair.yukawa(r_cut=10)\n')
+	# yukawa potential interactions for bias
         for i in range(0,len(sig)):
                 for j in range(i,len(sig)):
                         if i == 3 and j == 4:
