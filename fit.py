@@ -1,23 +1,33 @@
 import os
 from settings import *
 
+'''#######################################################################
+fit_param determines if the overall density is greater than 85% and that 
+30% of the molecules are in a cluster taking output from cluster()
+######################################################################'''
+
 def fit_param(fitness):
     currentRound = settings.rounds
     if not os.path.exists("good_traj/"):
         os.system('mkdir good_traj')
     os.chdir('good_traj')
     accept = 0
+    # paramters provide good fitness and will be changed
     if fitness.cloc < 0.85 or fitness.clust < 0.30 :
         settings.sig = [i for i in settings.old_sig]
         settings.eps = [i for i in settings.old_eps]
+    # parameters are not fit and arent changed
     else:
         settings.old_sig = [i for i in settings.sig]
         settings.old_eps = [i for i in settings.eps]
         accept += 1
-        if currentRound % 100 == 0:
-                os.system('cp ../random.xml random_{0}.xml'.format(currentRound))
-                os.system('cp ../random.dcd random_{0}.dcd'.format(currentRound))
+    #saves the trajectory every 100 EPOCHS
+    if currentRound % 100 == 0:
+        os.system('cp ../random.xml random_{0}.xml'.format(currentRound))
+        os.system('cp ../random.dcd random_{0}.dcd'.format(currentRound))
     os.chdir('..')
+    
+    #writes the output file for the runs to track changes
     if settings.rounds == 0:
         fit_file = open('fit.txt','w')
         fit_file.write('# rounds cloc clust bias sig1 sig2 sig3 eps11 eps12 eps13 eps22 eps23 eps33 accpet\n')
