@@ -7,21 +7,35 @@ Created on Wed Jul 20 17:54:29 2016
 import settings
 from main import Fitfactor
 
-in_cluster = []
-clusterSize = []
-nn = []
-cluster_cl = []
-nr_clusters = 0
-max_nn = 6
+'''#####################################################################################
+near_neigh() determines the nearest neighbor molecules for each molecule
+to be used in cluster_analyze()
+
+cluster_analyze() uses cluster analysis to first figure out the size of each cluster
+in the simulation,with the smallest cluster being two. This is done by calling
+find_cluster(). The cluster is then probed, in which each molecule within the cluster is 
+assigned a neighbor density which is summed at the end to determine the total density of 
+all cluster. If density is greater than 50% then it is shifted towards being pure 
+crystals with the greater than 80% being optimal.
+#####################################################################################'''
+
+
+#GLOBAL PARAMETERS USED JUST IN THIS FILE
+in_cluster = [] # determines if molecule is in cluster
+clusterSize = [] #array of all cluster sizes
+nn = [] # number of nearest neighbor each molecule has
+cluster_cl = [] # array of the actuall nearest neighbors for nn
+nr_clusters = 0 #index holder 
+max_nn = 6 
 
 def near_neigh(box_dim,all_pos):    
     global nn,clusterSize,in_cluster,cluster_cl        
-    mol_sig = []   
+    mol_sig = [] #array of all sigs  
     for j in range(0,3):
         mol_sig.append(settings.sig[j])
-    rc = (max(mol_sig)*2)+1
-    lx = abs(float(box_dim[0][0]) - float(box_dim[0][1]))
-    ly = abs(float(box_dim[1][0]) - float(box_dim[1][1]))
+    rc = (max(mol_sig)*2)+1 #determing the cut off raduis of neighbors
+    lx = abs(float(box_dim[0][0]) - float(box_dim[0][1])) #box dimensions
+    ly = abs(float(box_dim[1][0]) - float(box_dim[1][1])) #box dimensions
     num_part = len(all_pos)
     n_index = [0 for x_t in range(len(all_pos))]
     nn = [[0 for y_t in range(num_part)]for x_t in range(num_part)]
