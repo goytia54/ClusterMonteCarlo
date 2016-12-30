@@ -1,6 +1,10 @@
 import settings
 import random
 
+'''#####################################################################
+EorS() changes one parameter of the epsilons at random 
+####################################################################'''
+
 def EorS(): # returns sigmas
     eps = settings.eps
     sig = settings.sig
